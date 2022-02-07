@@ -8,6 +8,24 @@ require('./bootstrap');
 
 window.Vue = require('vue').default;
 import VueProgressBar from 'vue-progressbar';
+import Snotify, { SnotifyPosition } from 'vue-snotify';
+import {Form} from 'vform';
+window.Form = Form;
+import {
+  Button,
+  HasError,
+  AlertError,
+  AlertErrors,
+  AlertSuccess
+} from 'vform/src/components/bootstrap5';
+
+const SnotifyOptions = {
+  toast: {
+    position: SnotifyPosition.rightTop
+  }
+}
+
+Vue.use(Snotify, SnotifyOptions)
 
 const VueProgressBarOptions = {
     color: '#bffaf3',
@@ -37,6 +55,13 @@ const VueProgressBarOptions = {
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('customer-component', require('./components/CustomerComponent.vue').default);
+Vue.component('pagination', require('./components/partial/PaginationComponent.vue').default);
+
+Vue.component(Button.name, Button)
+Vue.component(HasError.name, HasError)
+Vue.component(AlertError.name, AlertError)
+Vue.component(AlertErrors.name, AlertErrors)
+Vue.component(AlertSuccess.name, AlertSuccess)
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
