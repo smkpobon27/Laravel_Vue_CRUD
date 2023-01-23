@@ -59,7 +59,7 @@
                                     <td class="text-center">
                                         <button type="button" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>
                                         <button type="button" @click="edit(customer)" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button>
-                                        <button type="button" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
+                                        <button type="button" @click="destroy(customer)" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
                                     </td>
                                 </tr>
                                 <tr v-show="!customers.length">
@@ -268,6 +268,33 @@
                         this.$Progress.fail();
                         console.log(e);
                     })
+            },
+
+            destroy : function(customer){
+                this.$snotify.clear();
+                this.$snotify.confirm('You will not be able to recover this data!', 'Are you sure?', {
+                timeout: 5000,
+                showProgressBar: true,
+                closeOnClick: false,
+                pauseOnHover: true,
+                buttons: [
+                    {text: 'Yes', action: (toast) => {
+                         this.$snotify.remove(toast.id); 
+                         this.$Progress.start();
+                         axios.delete('/api/customers/'+customer.id)
+                            .then(response =>{
+                                this.getData();
+                                this.$Progress.finish();
+                                this.$snotify.success('Customer Deleted Succefully.', 'Success');
+                            })
+                            .catch(e =>{
+                                this.$Progress.fail();
+                                console.log(e);
+                            })
+                         }, bold: true},
+                    {text: 'No', action: (toast) => {console.log('Clicked: No'); this.$snotify.remove(toast.id); }, bold: true},
+                ]
+                });
             }
 
         }
